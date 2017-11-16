@@ -1,0 +1,1 @@
+A CMake build scripts for build Anti-Grain Geometry (AGG) library with CMake.
