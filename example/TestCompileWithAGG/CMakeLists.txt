@@ -61,7 +61,8 @@ set(SKIP_BUILD_AGG_EXAMPLES ON)
 set(SKIP_BUILD_AGG_MYAPP ON)
 
 # Library specific vars and options.
-set(ENV{AGG_DIR} "${CMAKE_INSTALL_PREFIX}")
+set(AGG_DIR "${CMAKE_INSTALL_PREFIX}")
+set(ENV{AGG_DIR} "${AGG_DIR}")
 set(AGG_DIR_BIN "${CMAKE_INSTALL_PREFIX}/bin")
 
 # Var antigrain_SOURCE_DIR is set in lib_cmaker_agg() from UNPACKED_SRC_DIR.

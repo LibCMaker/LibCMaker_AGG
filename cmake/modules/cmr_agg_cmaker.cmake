@@ -92,10 +92,10 @@ function(cmr_agg_cmaker)
 
 
   #-----------------------------------------------------------------------
-  # Overwrite CMakeLists.txt files with patched files.
+  # Overwrite CMake files with patched files.
   #
   cmr_print_message(
-    "Overwrite CMakeLists.txt files with patched files in unpacked sources.")
+    "Overwrite CMake files with patched files in unpacked sources.")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
       ${PROJECT_SOURCE_DIR}/cmake/modules/patched_CMakeLists.txt
@@ -106,6 +106,12 @@ function(cmr_agg_cmaker)
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
       ${PROJECT_SOURCE_DIR}/cmake/modules/patched_bin_FindAgg.cmake
       ${lib_SRC_DIR}/bin/FindAgg.cmake
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_bin_AggConfig.cmake.in
+      ${lib_SRC_DIR}/bin/AggConfig.cmake.in
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_bin_AggConfigOutBuild.cmake.in
+      ${lib_SRC_DIR}/bin/AggConfigOutBuild.cmake.in
   )
 
 

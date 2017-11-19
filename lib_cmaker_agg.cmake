@@ -135,7 +135,7 @@ function(lib_cmaker_agg)
   # Copy CMmake support files to the standard place.
   #
   set(cmake_support_files_install_dir
-    "${CMAKE_INSTALL_PREFIX}/lib/cmake/agg-${lib_VERSION}"
+    "${CMAKE_INSTALL_PREFIX}/lib/cmake/agg-${arg_VERSION}"
   )
   execute_process(
     COMMAND
