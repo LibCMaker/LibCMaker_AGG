@@ -207,38 +207,45 @@ IF ( agg_USE_FREETYPE )
 	INSTALL( FILES ../font_freetype/agg_font_freetype.h DESTINATION agg/font_freetype )	
 ENDIF ( agg_USE_FREETYPE )
 
-#platform stuff to ease sample use
-SET( platform_HEADERS   
-    ${antigrain_SOURCE_DIR}/include/platform/agg_platform_support.h
-)
+IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
+    #platform stuff to ease sample use
+    SET( platform_HEADERS   
+        ${antigrain_SOURCE_DIR}/include/platform/agg_platform_support.h
+    )
+ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF(WIN32)
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/font_win32_tt )
 
-    ADD_LIBRARY( platform
-        ../src/platform/win32/agg_win32_bmp.cpp
-        ../src/platform/win32/agg_platform_support.cpp
-        ../font_win32_tt/agg_font_win32_tt.cpp
-		
-		${platform_HEADERS}		
-    )
+    IF(NOT NOT_ADD_AGG_PLATFORM)
+        ADD_LIBRARY( platform
+            ../src/platform/win32/agg_win32_bmp.cpp
+            ../src/platform/win32/agg_platform_support.cpp
+            ../font_win32_tt/agg_font_win32_tt.cpp
+        
+        ${platform_HEADERS}   
+        )
+    ENDIF(NOT NOT_ADD_AGG_PLATFORM)
+
 	INSTALL( FILES ../font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )	
 ENDIF(WIN32)
-IF(UNIX AND NOT ANDROID)
+
+IF(UNIX AND NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     ADD_LIBRARY( platform
         ../src/platform/X11/agg_platform_support.cpp
 
 		${platform_HEADERS}		
     )
-ENDIF(UNIX AND NOT ANDROID)
-IF(APPLE)
+ENDIF(UNIX AND NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
+
+IF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
     ADD_LIBRARY( platform
         ../src/platform/mac/agg_mac_pmap.cpp
         ../src/platform/mac/agg_platform_support.cpp
 
 		${platform_HEADERS}		
     )
-ENDIF(APPLE)
+ENDIF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF( SDL_FOUND AND agg_USE_SDL_PLATFORM )
     ADD_LIBRARY( sdlplatform
@@ -278,15 +285,17 @@ ENDIF ( agg_USE_AGG2D )
 
 SET_TARGET_PROPERTIES( antigrain PROPERTIES OUTPUT_NAME agg${PFDEBUG} )
 SET_TARGET_PROPERTIES( controls  PROPERTIES OUTPUT_NAME aggctrl${PFDEBUG} )
-IF(NOT ANDROID)
+
+IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     SET_TARGET_PROPERTIES( platform  PROPERTIES OUTPUT_NAME aggplatform${PFDEBUG} )
-ENDIF(NOT ANDROID)
+ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 INSTALL( FILES ${antigrain_HEADERS} DESTINATION agg/include )	
 INSTALL( FILES ${controls_HEADERS} DESTINATION agg/include/ctrl )	
-IF(NOT ANDROID)
+
+IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     INSTALL( FILES ${platform_HEADERS} DESTINATION agg/include/platform ) 
     INSTALL( TARGETS antigrain controls platform DESTINATION lib )
-ELSE(NOT ANDROID)
+ELSE(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     INSTALL( TARGETS antigrain controls DESTINATION lib )
-ENDIF(NOT ANDROID)
+ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)

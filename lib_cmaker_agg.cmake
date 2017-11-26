@@ -103,6 +103,7 @@ function(lib_cmaker_agg)
     agg_USE_DEBUG
     agg_USE_AGG2D_FREETYPE
     
+    NOT_ADD_AGG_PLATFORM
     SKIP_BUILD_AGG_EXAMPLES
     SKIP_BUILD_AGG_MYAPP
   )

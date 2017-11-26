@@ -118,7 +118,7 @@ IF( AGG_DIR_BIN )
 
     SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_aggfontfreetype} )
 
-    if(NOT ANDROID)
+    if(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
       FIND_LIBRARY(AGG_LIBRARY_aggplatform
         NAMES aggplatform
         PATHS
@@ -128,7 +128,7 @@ IF( AGG_DIR_BIN )
       )
 
       SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_aggplatform} )
-    endif(NOT ANDROID)
+    endif(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
     FIND_LIBRARY(AGG_LIBRARY_gpc
       NAMES gpc
