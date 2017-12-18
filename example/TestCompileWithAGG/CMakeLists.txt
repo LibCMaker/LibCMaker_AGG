@@ -29,6 +29,19 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 
 #-----------------------------------------------------------------------
+# Configure for find_package.
+#-----------------------------------------------------------------------
+
+# Set CMake's search path for find_package(), find_program(), find_library(),
+# find_file(), and find_path() commands.
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
+
+if(ANDROID)
+  list(APPEND CMAKE_FIND_ROOT_PATH "${CMAKE_INSTALL_PREFIX}")
+endif()
+
+
+#-----------------------------------------------------------------------
 # Set path to LibCMaker root
 #-----------------------------------------------------------------------
 
@@ -100,19 +113,6 @@ lib_cmaker_agg(
   UNPACKED_SRC_DIR ${UNPACKED_SRC_DIR}
   BUILD_DIR ${BUILD_DIR}
 )
-
-
-#-----------------------------------------------------------------------
-# Configure for find_package.
-#-----------------------------------------------------------------------
-
-# Set CMake's search path for find_package(), find_program(), find_library(),
-# find_file(), and find_path() commands.
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
-
-if(ANDROID)
-  list(APPEND CMAKE_FIND_ROOT_PATH "${CMAKE_INSTALL_PREFIX}")
-endif()
 
 
 #-----------------------------------------------------------------------
