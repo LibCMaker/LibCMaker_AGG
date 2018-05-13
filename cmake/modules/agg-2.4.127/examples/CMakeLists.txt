@@ -21,4 +21,4 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ****************************************************************************
 
-# Empty CMakeLists.txt file for overwriting in Allegro sources.
+# Empty CMakeLists.txt file for overwriting in original sources.

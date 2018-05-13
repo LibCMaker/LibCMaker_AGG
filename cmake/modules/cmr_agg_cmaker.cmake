@@ -95,57 +95,15 @@ function(cmr_agg_cmaker)
 
 
   #-----------------------------------------------------------------------
-  # Overwrite CMake files with patched files.
+  # Copy CMake build scripts.
   #
   cmr_print_message(
-    "Overwrite CMake files with patched files in unpacked sources.")
+    "Copy CMake build scripts to unpacked sources.")
   execute_process(
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_CMakeLists.txt
-      ${lib_SRC_DIR}/CMakeLists.txt
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_src_CMakeLists.txt
-      ${lib_SRC_DIR}/src/CMakeLists.txt
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_bin_FindAgg.cmake
-      ${lib_SRC_DIR}/bin/FindAgg.cmake
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_bin_AggConfig.cmake.in
-      ${lib_SRC_DIR}/bin/AggConfig.cmake.in
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      ${PROJECT_SOURCE_DIR}/cmake/modules/patched_bin_AggConfigOutBuild.cmake.in
-      ${lib_SRC_DIR}/bin/AggConfigOutBuild.cmake.in
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${PROJECT_SOURCE_DIR}/cmake/modules/agg-${lib_VERSION}
+      ${lib_SRC_DIR}/
   )
-
-
-  #-----------------------------------------------------------------------
-  # Overwrite <src>/examples/CMakeLists.txt with empty file
-  # to exclude its building.
-  #
-  if(SKIP_BUILD_AGG_EXAMPLES)
-    cmr_print_message(
-      "Overwrite <src>/examples/CMakeLists.txt with empty file in unpacked sources.")
-    execute_process(
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${PROJECT_SOURCE_DIR}/cmake/modules/empty_CMakeLists.txt
-        ${lib_SRC_DIR}/examples/CMakeLists.txt
-    )
-  endif()
-
-
-  #-----------------------------------------------------------------------
-  # Overwrite <src>/myapp/CMakeLists.txt with empty file
-  # to exclude its building.
-  #
-  if(SKIP_BUILD_AGG_MYAPP)
-    cmr_print_message(
-      "Overwrite <src>/myapp/CMakeLists.txt with empty file in unpacked sources.")
-    execute_process(
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${PROJECT_SOURCE_DIR}/cmake/modules/empty_CMakeLists.txt
-        ${lib_SRC_DIR}/myapp/CMakeLists.txt
-    )
-  endif()
 
 
   #-----------------------------------------------------------------------
