@@ -133,33 +133,33 @@ SET( antigrain_HEADERS
 
 ADD_LIBRARY( antigrain
 
-    agg_arc.cpp
-    agg_arrowhead.cpp
-    agg_bezier_arc.cpp
-    agg_bspline.cpp
-    agg_curves.cpp
-    agg_embedded_raster_fonts.cpp
-    agg_gsv_text.cpp
-    agg_image_filters.cpp
-    agg_line_aa_basics.cpp
-    agg_line_profile_aa.cpp
-    agg_rounded_rect.cpp
-    agg_sqrt_tables.cpp
-    agg_trans_affine.cpp
-    agg_trans_double_path.cpp
-    agg_trans_single_path.cpp
-    agg_trans_warp_magnifier.cpp
-    agg_vcgen_bspline.cpp
-    agg_vcgen_contour.cpp
-    agg_vcgen_dash.cpp
-    agg_vcgen_markers_term.cpp
-    agg_vcgen_smooth_poly1.cpp
-    agg_vcgen_stroke.cpp
-    agg_vpgen_clip_polygon.cpp
-    agg_vpgen_segmentator.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_arc.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_arrowhead.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_bezier_arc.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_bspline.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_curves.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_embedded_raster_fonts.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_gsv_text.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_image_filters.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_line_aa_basics.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_line_profile_aa.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_rounded_rect.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_sqrt_tables.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_trans_affine.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_trans_double_path.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_trans_single_path.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_trans_warp_magnifier.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vcgen_bspline.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vcgen_contour.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vcgen_dash.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vcgen_markers_term.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vcgen_smooth_poly1.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vcgen_stroke.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vpgen_clip_polygon.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vpgen_segmentator.cpp
 
-    agg_color_rgba.cpp
-    agg_vpgen_clip_polyline.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_color_rgba.cpp
+    ${antigrain_SOURCE_DIR}/src/agg_vpgen_clip_polyline.cpp
 
     ${antigrain_HEADERS}
 )
@@ -179,15 +179,15 @@ SET( controls_HEADERS
 )
 
 ADD_LIBRARY( controls    
-    ctrl/agg_spline_ctrl.cpp
-    ctrl/agg_slider_ctrl.cpp
-    ctrl/agg_scale_ctrl.cpp
-    ctrl/agg_rbox_ctrl.cpp
-    ctrl/agg_polygon_ctrl.cpp
-    ctrl/agg_gamma_spline.cpp
-    ctrl/agg_gamma_ctrl.cpp
-    ctrl/agg_cbox_ctrl.cpp
-    ctrl/agg_bezier_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_spline_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_slider_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_scale_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_rbox_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_polygon_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_gamma_spline.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_gamma_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_cbox_ctrl.cpp
+    ${antigrain_SOURCE_DIR}/src/ctrl/agg_bezier_ctrl.cpp
 
     ${controls_HEADERS}
 )
@@ -199,12 +199,12 @@ IF ( agg_USE_FREETYPE )
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/font_freetype )
 
     ADD_LIBRARY( freetypefont
-        ../font_freetype/agg_font_freetype.h
-        ../font_freetype/agg_font_freetype.cpp
+        ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.h
+        ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.cpp
     )	
     SET_TARGET_PROPERTIES( freetypefont  PROPERTIES OUTPUT_NAME aggfontfreetype${PFDEBUG} )
     INSTALL( TARGETS freetypefont DESTINATION lib )
-	INSTALL( FILES ../font_freetype/agg_font_freetype.h DESTINATION agg/font_freetype )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.h DESTINATION agg/font_freetype )	
 ENDIF ( agg_USE_FREETYPE )
 
 IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
@@ -219,20 +219,20 @@ IF(WIN32)
 
     IF(NOT NOT_ADD_AGG_PLATFORM)
         ADD_LIBRARY( platform
-            ../src/platform/win32/agg_win32_bmp.cpp
-            ../src/platform/win32/agg_platform_support.cpp
-            ../font_win32_tt/agg_font_win32_tt.cpp
+            ${antigrain_SOURCE_DIR}/src/platform/win32/agg_win32_bmp.cpp
+            ${antigrain_SOURCE_DIR}/src/platform/win32/agg_platform_support.cpp
+            ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.cpp
         
         ${platform_HEADERS}   
         )
     ENDIF(NOT NOT_ADD_AGG_PLATFORM)
 
-	INSTALL( FILES ../font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )	
 ENDIF(WIN32)
 
 IF(UNIX AND NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     ADD_LIBRARY( platform
-        ../src/platform/X11/agg_platform_support.cpp
+        ${antigrain_SOURCE_DIR}/src/platform/X11/agg_platform_support.cpp
 
 		${platform_HEADERS}		
     )
@@ -240,8 +240,8 @@ ENDIF(UNIX AND NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
     ADD_LIBRARY( platform
-        ../src/platform/mac/agg_mac_pmap.cpp
-        ../src/platform/mac/agg_platform_support.cpp
+        ${antigrain_SOURCE_DIR}/src/platform/mac/agg_mac_pmap.cpp
+        ${antigrain_SOURCE_DIR}/src/platform/mac/agg_platform_support.cpp
 
 		${platform_HEADERS}		
     )
@@ -249,7 +249,7 @@ ENDIF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF( SDL_FOUND AND agg_USE_SDL_PLATFORM )
     ADD_LIBRARY( sdlplatform
-        ../src/platform/sdl/agg_platform_support.cpp
+        ${antigrain_SOURCE_DIR}/src/platform/sdl/agg_platform_support.cpp
 		
 		${platform_HEADERS}		
     )
@@ -263,11 +263,11 @@ IF ( agg_USE_GPC )
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/gpc )
 
     ADD_LIBRARY( gpcbool
-        ../gpc/gpc.c
-        ../gpc/gpc.h
+        ${antigrain_SOURCE_DIR}/gpc/gpc.c
+        ${antigrain_SOURCE_DIR}/gpc/gpc.h
     )
     INSTALL( TARGETS gpcbool DESTINATION lib )
-	INSTALL( FILES ../gpc/gpc.h DESTINATION agg/gpc )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/gpc/gpc.h DESTINATION agg/gpc )	
     SET_TARGET_PROPERTIES( gpcbool   PROPERTIES OUTPUT_NAME gpc${PFDEBUG} )
 ENDIF ( agg_USE_GPC )
 
@@ -275,11 +275,11 @@ IF ( agg_USE_AGG2D )
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/agg2d )
 
     ADD_LIBRARY( agg2d
-        ../agg2d/agg2d.cpp
-        ../agg2d/agg2d.h
+        ${antigrain_SOURCE_DIR}/agg2d/agg2d.cpp
+        ${antigrain_SOURCE_DIR}/agg2d/agg2d.h
     )
     INSTALL( TARGETS agg2d DESTINATION lib )
-	INSTALL( FILES ../agg2d/agg2d.h DESTINATION agg/agg2d )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/agg2d/agg2d.h DESTINATION agg/agg2d )	
     SET_TARGET_PROPERTIES( agg2d  PROPERTIES OUTPUT_NAME agg2d${PFDEBUG} )
 ENDIF ( agg_USE_AGG2D )
 
