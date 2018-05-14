@@ -1,4 +1,3 @@
-
 SET( antigrain_HEADERS
     ${antigrain_SOURCE_DIR}/include/agg_alpha_mask_u8.h
     ${antigrain_SOURCE_DIR}/include/agg_arc.h

@@ -81,9 +81,6 @@ set(AGG_DIR "${CMAKE_INSTALL_PREFIX}")
 set(ENV{AGG_DIR} "${AGG_DIR}")
 set(AGG_DIR_BIN "${CMAKE_INSTALL_PREFIX}/bin")
 
-# Var antigrain_SOURCE_DIR is set in lib_cmaker_agg() from UNPACKED_SRC_DIR.
-# Var antigrain_BINARY_DIR is set in lib_cmaker_agg() from CMAKE_INSTALL_PREFIX.
-
 option(agg_USE_GPC "Use Gpc Boolean library" OFF)
 option(agg_USE_FREETYPE "Use Freetype library" OFF)
 option(agg_USE_EXPAT "Use Expat library" OFF)
@@ -134,14 +131,11 @@ if(WIN32)
       -D_MSWVC_ -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE
     )
     set(WIN32GUI WIN32)    
-    include_directories(${antigrain_SOURCE_DIR}/font_win32_tt)
-    include_directories(${antigrain_SOURCE_DIR}/font_freetype)
 endif()
 
 if(UNIX AND NOT ANDROID)
     add_definitions( -D__UNIX__ )
     set(WIN32GUI "")
-    include_directories(${antigrain_SOURCE_DIR}/font_freetype)
 
     find_package(X11)
     if(X11_FOUND)  

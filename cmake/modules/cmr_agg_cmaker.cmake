@@ -60,10 +60,6 @@ function(cmr_agg_cmaker)
   set(lib_SRC_DIR "${lib_UNPACKED_SRC_DIR}/${lib_SRC_DIR_NAME}")
   set(lib_BUILD_SRC_DIR "${lib_BUILD_DIR}/${lib_SRC_DIR_NAME}")
 
-  # Library specific vars.
-  set(antigrain_SOURCE_DIR ${lib_SRC_DIR})
-  set(antigrain_BINARY_DIR ${CMAKE_INSTALL_PREFIX})
-
 
   #-----------------------------------------------------------------------
   # Build library.
