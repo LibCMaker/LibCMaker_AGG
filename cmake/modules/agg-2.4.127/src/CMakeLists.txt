@@ -131,8 +131,7 @@ SET( antigrain_HEADERS
     ${antigrain_SOURCE_DIR}/include/agg_rasterizer_scanline_aa_nogamma.h
 )
 
-ADD_LIBRARY( antigrain
-
+SET( antigrain_SOURCES
     ${antigrain_SOURCE_DIR}/src/agg_arc.cpp
     ${antigrain_SOURCE_DIR}/src/agg_arrowhead.cpp
     ${antigrain_SOURCE_DIR}/src/agg_bezier_arc.cpp
@@ -160,8 +159,6 @@ ADD_LIBRARY( antigrain
 
     ${antigrain_SOURCE_DIR}/src/agg_color_rgba.cpp
     ${antigrain_SOURCE_DIR}/src/agg_vpgen_clip_polyline.cpp
-
-    ${antigrain_HEADERS}
 )
 
 #controls code for interactive modifying samples
@@ -178,7 +175,7 @@ SET( controls_HEADERS
     ${antigrain_SOURCE_DIR}/include/ctrl/agg_bezier_ctrl.h
 )
 
-ADD_LIBRARY( controls    
+SET( controls_SOURCES
     ${antigrain_SOURCE_DIR}/src/ctrl/agg_spline_ctrl.cpp
     ${antigrain_SOURCE_DIR}/src/ctrl/agg_slider_ctrl.cpp
     ${antigrain_SOURCE_DIR}/src/ctrl/agg_scale_ctrl.cpp
@@ -188,22 +185,16 @@ ADD_LIBRARY( controls
     ${antigrain_SOURCE_DIR}/src/ctrl/agg_gamma_ctrl.cpp
     ${antigrain_SOURCE_DIR}/src/ctrl/agg_cbox_ctrl.cpp
     ${antigrain_SOURCE_DIR}/src/ctrl/agg_bezier_ctrl.cpp
-
-    ${controls_HEADERS}
 )
 
+SET( antigrain_SOURCES ${antigrain_SOURCES} ${controls_SOURCES} )
+
 #freetype library
-
 IF ( agg_USE_FREETYPE )
-
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/font_freetype )
-
-    ADD_LIBRARY( freetypefont
-        ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.h
+    SET( antigrain_SOURCES ${antigrain_SOURCES} 
         ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.cpp
-    )	
-    SET_TARGET_PROPERTIES( freetypefont  PROPERTIES OUTPUT_NAME aggfontfreetype${PFDEBUG} )
-    INSTALL( TARGETS freetypefont DESTINATION lib )
+    )
     INSTALL( FILES ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.h DESTINATION agg/font_freetype )	
 ENDIF ( agg_USE_FREETYPE )
 
@@ -212,90 +203,65 @@ IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     SET( platform_HEADERS   
         ${antigrain_SOURCE_DIR}/include/platform/agg_platform_support.h
     )
+    INSTALL( FILES ${platform_HEADERS} DESTINATION agg/include/platform ) 
 ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF(WIN32)
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/font_win32_tt )
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
+        ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.cpp
+    )
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )	
 
     IF(NOT NOT_ADD_AGG_PLATFORM)
-        ADD_LIBRARY( platform
+        SET( antigrain_SOURCES ${antigrain_SOURCES}
             ${antigrain_SOURCE_DIR}/src/platform/win32/agg_win32_bmp.cpp
             ${antigrain_SOURCE_DIR}/src/platform/win32/agg_platform_support.cpp
-            ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.cpp
-        
-        ${platform_HEADERS}   
         )
     ENDIF(NOT NOT_ADD_AGG_PLATFORM)
-
-    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )	
 ENDIF(WIN32)
 
 IF(UNIX AND NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
-    ADD_LIBRARY( platform
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/src/platform/X11/agg_platform_support.cpp
-
-		${platform_HEADERS}		
     )
 ENDIF(UNIX AND NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
-    ADD_LIBRARY( platform
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/src/platform/mac/agg_mac_pmap.cpp
         ${antigrain_SOURCE_DIR}/src/platform/mac/agg_platform_support.cpp
-
-		${platform_HEADERS}		
     )
 ENDIF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF( SDL_FOUND AND agg_USE_SDL_PLATFORM )
-    ADD_LIBRARY( sdlplatform
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/src/platform/sdl/agg_platform_support.cpp
-		
-		${platform_HEADERS}		
-    )
-    INSTALL( TARGETS sdlplatform DESTINATION lib )
-    SET_TARGET_PROPERTIES( sdlplatform  PROPERTIES OUTPUT_NAME aggsdlplatform${PFDEBUG} )
+    ) 
 ENDIF( SDL_FOUND AND agg_USE_SDL_PLATFORM )
 
 # boolean operations library GPC
-
 IF ( agg_USE_GPC )
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/gpc )
-
-    ADD_LIBRARY( gpcbool
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/gpc/gpc.c
-        ${antigrain_SOURCE_DIR}/gpc/gpc.h
     )
-    INSTALL( TARGETS gpcbool DESTINATION lib )
     INSTALL( FILES ${antigrain_SOURCE_DIR}/gpc/gpc.h DESTINATION agg/gpc )	
-    SET_TARGET_PROPERTIES( gpcbool   PROPERTIES OUTPUT_NAME gpc${PFDEBUG} )
 ENDIF ( agg_USE_GPC )
 
 IF ( agg_USE_AGG2D )
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/agg2d )
-
-    ADD_LIBRARY( agg2d
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/agg2d/agg2d.cpp
-        ${antigrain_SOURCE_DIR}/agg2d/agg2d.h
     )
-    INSTALL( TARGETS agg2d DESTINATION lib )
     INSTALL( FILES ${antigrain_SOURCE_DIR}/agg2d/agg2d.h DESTINATION agg/agg2d )	
-    SET_TARGET_PROPERTIES( agg2d  PROPERTIES OUTPUT_NAME agg2d${PFDEBUG} )
 ENDIF ( agg_USE_AGG2D )
 
+ADD_LIBRARY( antigrain
+    ${antigrain_SOURCES}
+)
 SET_TARGET_PROPERTIES( antigrain PROPERTIES OUTPUT_NAME agg${PFDEBUG} )
-SET_TARGET_PROPERTIES( controls  PROPERTIES OUTPUT_NAME aggctrl${PFDEBUG} )
-
-IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
-    SET_TARGET_PROPERTIES( platform  PROPERTIES OUTPUT_NAME aggplatform${PFDEBUG} )
-ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 INSTALL( FILES ${antigrain_HEADERS} DESTINATION agg/include )	
 INSTALL( FILES ${controls_HEADERS} DESTINATION agg/include/ctrl )	
-
-IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
-    INSTALL( FILES ${platform_HEADERS} DESTINATION agg/include/platform ) 
-    INSTALL( TARGETS antigrain controls platform DESTINATION lib )
-ELSE(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
-    INSTALL( TARGETS antigrain controls DESTINATION lib )
-ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
+INSTALL( TARGETS antigrain DESTINATION lib )

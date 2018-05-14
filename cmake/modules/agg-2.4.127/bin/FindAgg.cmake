@@ -97,48 +97,6 @@ IF( AGG_DIR_BIN )
     )
 
     SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_agg} )
-
-    FIND_LIBRARY(AGG_LIBRARY_aggctrl
-      NAMES aggctrl
-      PATHS
-      ${AGG_DIR}
-      NO_DEFAULT_PATH
-      PATH_SUFFIXES lib64 lib
-    )
-
-    SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_aggctrl} )
-
-    FIND_LIBRARY(AGG_LIBRARY_aggfontfreetype
-      NAMES aggfontfreetype
-      PATHS
-      ${AGG_DIR}
-      NO_DEFAULT_PATH
-      PATH_SUFFIXES lib64 lib
-    )
-
-    SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_aggfontfreetype} )
-
-    if(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
-      FIND_LIBRARY(AGG_LIBRARY_aggplatform
-        NAMES aggplatform
-        PATHS
-        ${AGG_DIR}
-        NO_DEFAULT_PATH
-        PATH_SUFFIXES lib64 lib
-      )
-
-      SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_aggplatform} )
-    endif(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
-
-    FIND_LIBRARY(AGG_LIBRARY_gpc
-      NAMES gpc
-      PATHS
-      ${AGG_DIR}
-      NO_DEFAULT_PATH
-      PATH_SUFFIXES lib64 lib
-    )
-
-    SET( AGG_LIBRARIES ${AGG_LIBRARIES} ${AGG_LIBRARY_gpc} )
     SET( AGG_INCLUDE_DIRS ${AGG_INCLUDE_DIR} )
   
   ENDIF(AGG_BUILT_WITH_CMAKE)
