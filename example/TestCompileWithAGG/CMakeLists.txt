@@ -171,9 +171,15 @@ endif()
 # Link to the library.
 #-----------------------------------------------------------------------
 
-# agg_platform_support.cpp is not implemented for Android to compile executables.
-# Libraries for Android should be compiled as usual.
-if(NOT ANDROID)
+# Build test executables
+
+# agg_platform_support.cpp is not implemented for Android.
+if(ANDROID)
+  add_executable(${PROJECT_NAME}
+    example.cpp
+  )
+
+else() # if(NOT ANDROID)
   # Get an example sources from the AGG sources.
   include(
     ${PROJECT_SOURCE_DIR}/cmake/LibCMaker_AGG/cmake/modules/cmr_agg_get_download_params.cmake)
@@ -181,10 +187,10 @@ if(NOT ANDROID)
     lib_URL lib_SHA lib_SRC_DIR_NAME lib_ARCH_FILE_NAME)
   set(lib_SRC_DIR "${UNPACKED_SRC_DIR}/${lib_SRC_DIR_NAME}")
   
-  # Build test executables
   add_executable(${PROJECT_NAME} ${WIN32GUI}
     ${lib_SRC_DIR}/examples/aa_demo.cpp
   )
-  target_include_directories(${PROJECT_NAME} PRIVATE ${AGG_INCLUDE_DIRS})
-  target_link_libraries(${PROJECT_NAME} ${AGG_LIBRARIES})
 endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${AGG_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${AGG_LIBRARIES})
