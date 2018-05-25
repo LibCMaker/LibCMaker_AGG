@@ -64,7 +64,7 @@ set(LIBCMAKER_SRC_DIR "${PROJECT_SOURCE_DIR}/cmake/LibCMaker")
 # Set useful vars for lib_cmaker_agg().
 set(cmr_PRINT_DEBUG ON)
 
-set(lib_VERSION "2.4.127")
+set(lib_VERSION "2.4.128")
 
 set(DOWNLOAD_DIR "${PROJECT_BINARY_DIR}")
 set(UNPACKED_SRC_DIR "${PROJECT_BINARY_DIR}")

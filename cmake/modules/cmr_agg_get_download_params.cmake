@@ -21,7 +21,6 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ****************************************************************************
 
-include(cmr_get_version_parts)
 include(cmr_print_fatal_error)
 
 function(cmr_agg_get_download_params
@@ -30,25 +29,21 @@ function(cmr_agg_get_download_params
 
   # We get the source tar file from an unofficial place,
   # so as not to depend on the "svn" program.
-  set(lib_base_url "https://bitbucket.org/libcmaker_downloads/agg_sources/raw")
+  set(lib_base_url "https://github.com/LibCMaker/LibCMaker_AGG_Sources/archive")
 
-  # Version format is major.minor.patch where patch is svn commit number, r127.
-  if(version VERSION_EQUAL "2.4.127")
+  # Version format is major.minor.patch where patch is svn commit number, r128.
+  if(version VERSION_EQUAL "2.4.128")
     set(lib_sha
-      "6ea690c6eecc6b807629d7c237ea2986548a810c4d666be08ea6fc41f57e704d")
-    set(lib_src_commit
-      "0aa6b0e2f7e002b2a3c25f924f1f8d522c8b0376")
+      "abb572a59013c9eb81cba84a4e2d08e279e224b33f8f5e7169482b043ae0cb71")
   endif()
 
   if(NOT DEFINED lib_sha)
     cmr_print_fatal_error("Library version ${version} is not supported.")
   endif()
 
-  cmr_get_version_parts(${version} major minor patch tweak)
-  
-  set(lib_src_name "agg-${major}.${minor}-r${patch}")
-  set(lib_tar_file_name "${lib_src_name}.tar.bz2")
-  set(lib_url "${lib_base_url}/${lib_src_commit}/${lib_tar_file_name}")
+  set(lib_src_name "LibCMaker_AGG_Sources-${version}")
+  set(lib_tar_file_name "${lib_src_name}.tar.gz")
+  set(lib_url "${lib_base_url}/v${version}.tar.gz")
 
   set(${out_url} "${lib_url}" PARENT_SCOPE)
   set(${out_sha} "${lib_sha}" PARENT_SCOPE)
