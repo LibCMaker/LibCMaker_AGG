@@ -21,18 +21,17 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ****************************************************************************
 
-# Can be used as separate project for library building with standard CMake way.
+# Part of "LibCMaker/cmake/modules/cmr_build_rules.cmake".
 
-cmake_minimum_required(VERSION 3.2)
-project(LibCMaker_AGG)
+  # Copy CMake build scripts.
+  cmr_print_message(
+    "Copy CMake build scripts to unpacked sources.")
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${lib_BASE_DIR}/cmake/modules/agg-${lib_VERSION}
+      ${lib_SRC_DIR}/
+  )
 
-if(NOT LIBCMAKER_SRC_DIR)
-  message(FATAL_ERROR
-    "Please set LIBCMAKER_SRC_DIR with path to LibCMaker project root")
-endif()
-list(APPEND CMAKE_MODULE_PATH "${LIBCMAKER_SRC_DIR}/cmake/modules")
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
-
-include(cmr_agg_cmaker)
-cmr_agg_cmaker()
+  # Configure library.
+  add_subdirectory(${lib_SRC_DIR} ${lib_VERSION_BUILD_DIR})

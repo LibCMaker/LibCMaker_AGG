@@ -21,32 +21,27 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ****************************************************************************
 
-include(cmr_print_fatal_error)
-
-function(cmr_agg_get_download_params
-    version
-    out_url out_sha out_src_dir_name out_tar_file_name)
-
-  # We get the source tar file from an unofficial place,
-  # so as not to depend on the "svn" program.
-  set(lib_base_url "https://github.com/LibCMaker/LibCMaker_AGG_Sources/archive")
+# Part of "LibCMaker/cmake/modules/cmr_get_download_params.cmake".
 
   # Version format is major.minor.patch where patch is svn commit number, r128.
   if(version VERSION_EQUAL "2.4.128")
-    set(lib_sha
+    set(arch_file_sha
       "abb572a59013c9eb81cba84a4e2d08e279e224b33f8f5e7169482b043ae0cb71")
   endif()
 
-  if(NOT DEFINED lib_sha)
-    cmr_print_fatal_error("Library version ${version} is not supported.")
-  endif()
+  # We get the source tar file from an unofficial place,
+  # so as not to depend on the "svn" program.
+  set(base_url "https://github.com/LibCMaker/LibCMaker_AGG_Sources/archive")
+  set(src_dir_name    "agg-${version}")
+  set(arch_file_name  "${src_dir_name}.tar.bz2")
+  set(unpack_to_dir   "${unpacked_dir}/${src_dir_name}")
 
-  set(lib_src_name "LibCMaker_AGG_Sources-${version}")
-  set(lib_tar_file_name "${lib_src_name}.tar.gz")
-  set(lib_url "${lib_base_url}/v${version}.tar.gz")
-
-  set(${out_url} "${lib_url}" PARENT_SCOPE)
-  set(${out_sha} "${lib_sha}" PARENT_SCOPE)
-  set(${out_src_dir_name} "${lib_src_name}" PARENT_SCOPE)
-  set(${out_tar_file_name} "${lib_tar_file_name}" PARENT_SCOPE)
-endfunction()
+  set(${out_ARCH_SRC_URL}   "${base_url}/v${version}.tar.gz" PARENT_SCOPE)
+  set(${out_ARCH_DST_FILE}  "${download_dir}/${arch_file_name}" PARENT_SCOPE)
+  set(${out_ARCH_FILE_SHA}  "${arch_file_sha}" PARENT_SCOPE)
+  set(${out_SHA_ALG}        "SHA256" PARENT_SCOPE)
+  set(${out_UNPACK_TO_DIR}  "${unpack_to_dir}" PARENT_SCOPE)
+  set(${out_UNPACKED_SOURCES_DIR}
+    "${unpack_to_dir}/LibCMaker_AGG_Sources-${version}" PARENT_SCOPE
+  )
+  set(${out_VERSION_BUILD_DIR} "${build_dir}/${src_dir_name}" PARENT_SCOPE)
