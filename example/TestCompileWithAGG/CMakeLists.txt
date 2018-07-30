@@ -21,7 +21,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ****************************************************************************
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.3)
 
 project(LibCMaker_AGG_Compile_Test CXX)
 
@@ -87,7 +87,7 @@ option(agg_USE_SDL_PLATFORM "Use SDL as platform" OFF)
 option(agg_USE_PACK "Package Agg" OFF)
 option(agg_USE_AGG2D "Agg 2D graphical context" OFF)
 option(agg_USE_DEBUG "For debug version" OFF)
-option(agg_USE_AGG2D_FREETYPE "Agg 2D graphical context uses freetype" OFF)    
+option(agg_USE_AGG2D_FREETYPE "Agg 2D graphical context uses freetype" OFF)
 
 # TODO: set ENV{FREETYPE_DIR}
 
@@ -126,23 +126,22 @@ if(WIN32)
   add_definitions(
     -D_MSWVC_ -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE
   )
-  set(WIN32GUI WIN32)    
+  set(WIN32GUI WIN32)
 endif()
 
 if(UNIX AND NOT ANDROID)
   add_definitions( -D__UNIX__ )
-  set(WIN32GUI "")
 
   find_package(X11)
-  if(X11_FOUND)  
+  if(X11_FOUND)
     include_directories(${X11_INCLUDE_DIRS})
     link_libraries(${X11_LIBRARIES})
   endif()
 endif()
 
 if(agg_USE_EXPAT)
-  find_package(EXPAT)                    
-  if(EXPAT_FOUND)  
+  find_package(EXPAT)
+  if(EXPAT_FOUND)
     include_directories(${EXPAT_INCLUDE_DIRS})
     link_libraries(${EXPAT_LIBRARIES})
   else()  
@@ -151,7 +150,7 @@ if(agg_USE_EXPAT)
 endif()
 
 if(agg_USE_FREETYPE)
-  find_package(Freetype)                    
+  find_package(Freetype)
   if(FREETYPE_FOUND)
     include_directories(${FREETYPE_INCLUDE_DIRS})
     link_libraries(${FREETYPE_LIBRARIES})
