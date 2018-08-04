@@ -24,7 +24,7 @@
 # Part of "LibCMaker/cmake/modules/cmr_build_rules.cmake".
 
   # Copy CMake build scripts.
-  cmr_print_message(
+  cmr_print_status(
     "Copy CMake build scripts to unpacked sources.")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E copy_directory
