@@ -1,4 +1,31 @@
-PROJECT( antigrain )
+PROJECT( antigrain CXX)
+
+if(MSVC)
+  # https://stackoverflow.com/a/27443191
+  # 
+  # Problem is caused by the <Windows.h> header file that includes
+  # macro definitions named max and min:
+  # #define max(a,b) (((a) > (b)) ? (a) : (b))
+  # Seeing this definition, the preprocessor replaces the max identifier
+  # in the expression:
+  # std::numeric_limits<size_t>::max()
+  # by the macro definition, eventually leading to invalid syntax:
+  # std::numeric_limits<size_t>::(((a) > (b)) ? (a) : (b))
+  # reported in the compiler error: '(' : illegal token on right side of '::'.
+  # As a workaround, you can add the NOMINMAX define to compiler flags
+  # (or to the translation unit, before including the header):
+  # #define NOMINMAX
+  # or wrap the call to max with parenthesis,
+  # which prevents the macro expansion:
+  # size_t maxValue_ = (std::numeric_limits<size_t>::max)()
+  # //                 ^                                ^
+  # or #undef max before calling numeric_limits<size_t>::max():
+  # #undef max
+  # ...
+  # size_t maxValue_ = std::numeric_limits<size_t>::max()
+  #
+  add_definitions(-DNOMINMAX)
+endif()
 
 # additional are modified Find routines
 SET ( CMAKE_MODULE_PATH "${antigrain_SOURCE_DIR}/bin" )
