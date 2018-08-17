@@ -21,7 +21,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 # ****************************************************************************
 
-# Part of "LibCMaker/cmake/modules/cmr_get_download_params.cmake".
+# Part of "LibCMaker/cmake/cmr_get_download_params.cmake".
 
   # Version format is major.minor.patch where patch is svn commit number, r128.
   if(version VERSION_EQUAL "2.4.128")

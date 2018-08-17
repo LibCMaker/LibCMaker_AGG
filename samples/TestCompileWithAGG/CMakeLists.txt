@@ -40,33 +40,29 @@ if(ANDROID)
   list(APPEND CMAKE_FIND_ROOT_PATH "${CMAKE_INSTALL_PREFIX}")
 endif()
 
-# To use our FindAgg.cmake.
-list(APPEND CMAKE_MODULE_PATH
-  "${PROJECT_SOURCE_DIR}/cmake/LibCMaker_AGG/cmake"
-)
-
 
 #-----------------------------------------------------------------------
 # Set path to LibCMaker root
 #-----------------------------------------------------------------------
 
-set(LIBCMAKER_SRC_DIR "${PROJECT_SOURCE_DIR}/cmake/LibCMaker")
+set(LibCMaker_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake/LibCMaker")
 # Uncomment it if need functions from LibCMaker
-#list(APPEND CMAKE_MODULE_PATH "${LIBCMAKER_SRC_DIR}/cmake/modules")
+#list(APPEND CMAKE_MODULE_PATH "${LibCMaker_DIR}/cmake")
 
 
 #-----------------------------------------------------------------------
 # Set vars to LibCMaker_AGG
 #-----------------------------------------------------------------------
 
-# Standard CMake vars.
-#set(BUILD_SHARED_LIBS ON)
-
-# Vars to lib_cmaker_agg().
+set(AGG_lib_NAME      "AGG")
 set(AGG_lib_VERSION   "2.4.128")
-set(AGG_DOWNLOAD_DIR  "${PROJECT_BINARY_DIR}")
-set(AGG_UNPACKED_DIR  "${PROJECT_BINARY_DIR}")
-set(AGG_BUILD_DIR     "${PROJECT_BINARY_DIR}/build_agg")
+set(AGG_lib_DIR       "${CMAKE_CURRENT_LIST_DIR}/cmake/LibCMaker_AGG")
+
+# To use below for sample sources.
+set(cmr_UNPACKED_DIR ${CMAKE_CURRENT_BINARY_DIR}/download/unpacked)
+
+# To use our FindAgg.cmake.
+list(APPEND CMAKE_MODULE_PATH "${AGG_lib_DIR}/cmake/modules")
 
 set(AGG_DIR "${CMAKE_INSTALL_PREFIX}")
 set(ENV{AGG_DIR} "${AGG_DIR}")
@@ -78,7 +74,10 @@ endif()
 set(SKIP_BUILD_AGG_EXAMPLES ON)
 set(SKIP_BUILD_AGG_MYAPP ON)
 
-# Library specific vars and options.
+
+#-----------------------------------------------------------------------
+# Library specific vars and options
+#-----------------------------------------------------------------------
 
 option(agg_USE_GPC "Use Gpc Boolean library" OFF)
 option(agg_USE_FREETYPE "Use Freetype library" OFF)
@@ -93,27 +92,22 @@ option(agg_USE_AGG2D_FREETYPE "Agg 2D graphical context uses freetype" OFF)
 
 
 #-----------------------------------------------------------------------
-# Build and install the AGG
+# Build, install and find the AGG
 #-----------------------------------------------------------------------
 
-include(
-  ${PROJECT_SOURCE_DIR}/cmake/LibCMaker_AGG/lib_cmaker_agg.cmake)
-
-# Make compile, build and install the library at a config CMake phase.
-lib_cmaker_agg(
-  VERSION       ${AGG_lib_VERSION}
-  DOWNLOAD_DIR  ${AGG_DOWNLOAD_DIR}
-  UNPACKED_DIR  ${AGG_UNPACKED_DIR}
-  BUILD_DIR     ${AGG_BUILD_DIR}
+# Make build and install the library at a config CMake phase.
+include(${LibCMaker_DIR}/cmake/cmr_find_package.cmake)
+cmr_find_package(
+  LibCMaker_DIR     ${LibCMaker_DIR}
+  NAME              ${AGG_lib_NAME}
+  VERSION           ${AGG_lib_VERSION}
+  LIB_DIR           ${AGG_lib_DIR}
+  FIND_MODULE_NAME  Agg
+  REQUIRED
+  CONFIG
+  NOT_USE_VERSION_IN_FIND_PACKAGE
 )
 
-
-#-----------------------------------------------------------------------
-# find_package()
-#-----------------------------------------------------------------------
-
-# Use newly got library.
-find_package(Agg REQUIRED CONFIG)
 include(${AGG_USE_FILE})
 
 
@@ -144,7 +138,7 @@ if(agg_USE_EXPAT)
   if(EXPAT_FOUND)
     include_directories(${EXPAT_INCLUDE_DIRS})
     link_libraries(${EXPAT_LIBRARIES})
-  else()  
+  else()
     message(SEND_ERROR "expat not found")
   endif()
 endif()
@@ -170,13 +164,13 @@ endif()
 # agg_platform_support.cpp is not implemented for Android.
 if(ANDROID)
   add_executable(${PROJECT_NAME}
-    example.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/example.cpp
   )
 
 else() # if(NOT ANDROID)
   # Get an example sources from the lib sources.
   set(lib_SRC_DIR
-    "${AGG_UNPACKED_DIR}/agg-${AGG_lib_VERSION}/LibCMaker_AGG_Sources-${AGG_lib_VERSION}"
+    "${cmr_UNPACKED_DIR}/agg-${AGG_lib_VERSION}/LibCMaker_AGG_Sources-${AGG_lib_VERSION}"
   )
   set(lib_EXAMPLES_SRC_DIR ${lib_SRC_DIR}/examples)
 

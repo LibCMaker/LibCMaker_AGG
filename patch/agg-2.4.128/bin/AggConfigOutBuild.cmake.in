@@ -32,7 +32,7 @@ FOREACH( libdir ${AGG_LIBRARY_DIRS_CONFIG} )
     SET( AGG_LIBRARY_DIRS ${AGG_LIBRARY_DIRS} "${AGG_DIR}/${libdir}" )
 ENDFOREACH( libdir )
 
-SET( AGG_USE_FILE ${AGG_DIR}/bin/UseAgg.cmake )
+SET( AGG_USE_FILE ${AGG_DIR}/bin/UseAgg.cmake CACHE FILEPATH "..." FORCE)
 
 #options that where set
 SET( agg_USE_GPC @agg_USE_GPC@ )
