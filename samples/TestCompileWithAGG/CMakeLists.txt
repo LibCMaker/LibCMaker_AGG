@@ -3,7 +3,7 @@
 #  Purpose:  A CMake build script for Anti-Grain Geometry (AGG) library
 #  Author:   NikitaFeodonit, nfeodonit@yandex.com
 # ****************************************************************************
-#    Copyright (c) 2017-2018 NikitaFeodonit
+#    Copyright (c) 2017-2019 NikitaFeodonit
 #
 #    This file is part of the LibCMaker_AGG project.
 #
@@ -25,8 +25,8 @@ cmake_minimum_required(VERSION 3.4)
 
 project(LibCMaker_AGG_Compile_Test CXX)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
-set(cmr_PRINT_DEBUG ON)
+option(CMAKE_VERBOSE_MAKEFILE "CMAKE_VERBOSE_MAKEFILE" OFF)
+option(cmr_PRINT_DEBUG "cmr_PRINT_DEBUG" OFF)
 
 
 #-----------------------------------------------------------------------
@@ -42,73 +42,35 @@ endif()
 
 
 #-----------------------------------------------------------------------
-# Set path to LibCMaker root
+# Set path vars
 #-----------------------------------------------------------------------
 
-set(LibCMaker_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake/LibCMaker")
-# Uncomment it if need functions from LibCMaker
-#list(APPEND CMAKE_MODULE_PATH "${LibCMaker_DIR}/cmake")
-
-
-#-----------------------------------------------------------------------
-# Set vars to LibCMaker_AGG
-#-----------------------------------------------------------------------
-
-set(AGG_lib_NAME      "AGG")
-set(AGG_lib_VERSION   "2.4.128")
-set(AGG_lib_DIR       "${CMAKE_CURRENT_LIST_DIR}/cmake/LibCMaker_AGG")
-
+set(libs_DIR "${CMAKE_CURRENT_LIST_DIR}/libs")
+set(cmr_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
 # To use below for sample sources.
 set(cmr_UNPACKED_DIR ${CMAKE_CURRENT_BINARY_DIR}/download/unpacked)
 
-# To use our FindAgg.cmake.
-list(APPEND CMAKE_MODULE_PATH "${AGG_lib_DIR}/cmake/modules")
 
-set(AGG_DIR "${CMAKE_INSTALL_PREFIX}")
-set(ENV{AGG_DIR} "${AGG_DIR}")
-set(AGG_DIR_BIN "${CMAKE_INSTALL_PREFIX}/bin")
+#-----------------------------------------------------------------------
+# LibCMaker settings
+#-----------------------------------------------------------------------
 
-if(ANDROID)
-  set(NOT_ADD_AGG_PLATFORM ON)
+set(LibCMaker_DIR "${libs_DIR}/LibCMaker")
+list(APPEND CMAKE_MODULE_PATH "${LibCMaker_DIR}/cmake")
+include(cmr_find_package)
+
+
+#-----------------------------------------------------------------------
+# Download, configure, build, install and find the required libraries
+#-----------------------------------------------------------------------
+
+option(BUILD_TESTING "Build the testing tree." OFF)
+if(BUILD_TESTING)
+  enable_testing()
+  include(${libs_DIR}/LibCMaker_GoogleTest/cmr_build_googletest.cmake)
 endif()
-set(SKIP_BUILD_AGG_EXAMPLES ON)
-set(SKIP_BUILD_AGG_MYAPP ON)
 
-
-#-----------------------------------------------------------------------
-# Library specific vars and options
-#-----------------------------------------------------------------------
-
-option(agg_USE_GPC "Use Gpc Boolean library" OFF)
-option(agg_USE_FREETYPE "Use Freetype library" OFF)
-option(agg_USE_EXPAT "Use Expat library" OFF)
-option(agg_USE_SDL_PLATFORM "Use SDL as platform" OFF)
-option(agg_USE_PACK "Package Agg" OFF)
-option(agg_USE_AGG2D "Agg 2D graphical context" OFF)
-option(agg_USE_DEBUG "For debug version" OFF)
-option(agg_USE_AGG2D_FREETYPE "Agg 2D graphical context uses freetype" OFF)
-
-# TODO: set ENV{FREETYPE_DIR}
-
-
-#-----------------------------------------------------------------------
-# Build, install and find the AGG
-#-----------------------------------------------------------------------
-
-# Make build and install the library at a config CMake phase.
-include(${LibCMaker_DIR}/cmake/cmr_find_package.cmake)
-cmr_find_package(
-  LibCMaker_DIR     ${LibCMaker_DIR}
-  NAME              ${AGG_lib_NAME}
-  VERSION           ${AGG_lib_VERSION}
-  LIB_DIR           ${AGG_lib_DIR}
-  FIND_MODULE_NAME  Agg
-  REQUIRED
-  CONFIG
-  NOT_USE_VERSION_IN_FIND_PACKAGE
-)
-
-include(${AGG_USE_FILE})
+include(${libs_DIR}/LibCMaker_AGG/cmr_build_agg.cmake)
 
 
 #-----------------------------------------------------------------------
@@ -116,32 +78,32 @@ include(${AGG_USE_FILE})
 # Warning: find_package(Agg REQUIRED CONFIG) must be first.
 #-----------------------------------------------------------------------
 
-if(WIN32)
-  add_definitions(
-    -D_MSWVC_ -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE
-  )
-  set(WIN32GUI WIN32)
-endif()
+#if(WIN32)
+#  add_definitions(
+#    -D_MSWVC_ -D_CRT_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_DEPRECATE
+#  )
+#  set(WIN32GUI WIN32)
+#endif()
 
-if(UNIX AND NOT ANDROID)
-  add_definitions( -D__UNIX__ )
+#if(UNIX AND NOT ANDROID)
+#  add_definitions( -D__UNIX__ )
+#
+#  find_package(X11)
+#  if(X11_FOUND)
+#    include_directories(${X11_INCLUDE_DIRS})
+#    link_libraries(${X11_LIBRARIES})
+#  endif()
+#endif()
 
-  find_package(X11)
-  if(X11_FOUND)
-    include_directories(${X11_INCLUDE_DIRS})
-    link_libraries(${X11_LIBRARIES})
-  endif()
-endif()
-
-if(agg_USE_EXPAT)
-  find_package(EXPAT)
-  if(EXPAT_FOUND)
-    include_directories(${EXPAT_INCLUDE_DIRS})
-    link_libraries(${EXPAT_LIBRARIES})
-  else()
-    message(SEND_ERROR "expat not found")
-  endif()
-endif()
+#if(agg_USE_EXPAT)
+#  find_package(EXPAT)
+#  if(EXPAT_FOUND)
+#    include_directories(${EXPAT_INCLUDE_DIRS})
+#    link_libraries(${EXPAT_LIBRARIES})
+#  else()
+#    message(SEND_ERROR "expat not found")
+#  endif()
+#endif()
 
 if(agg_USE_FREETYPE)
   find_package(Freetype)
@@ -156,29 +118,48 @@ endif()
 
 
 #-----------------------------------------------------------------------
-# Link to the library
+# Build the executable of the example
 #-----------------------------------------------------------------------
 
-# Build test executables.
-
 # agg_platform_support.cpp is not implemented for Android.
-if(ANDROID)
-  add_executable(${PROJECT_NAME}
-    ${CMAKE_CURRENT_LIST_DIR}/example.cpp
-  )
+#if(ANDROID)
+#  set(example_src_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
+#  add_executable(${PROJECT_NAME}
+#    ${example_src_DIR}/example.cpp
+#  )
+#
+#else() # if(NOT ANDROID)
+#  # Get an example sources from the lib sources.
+#  set(lib_SRC_DIR
+#    "${cmr_UNPACKED_DIR}/agg-${AGG_lib_VERSION}/LibCMaker_AGG_Sources-${AGG_lib_VERSION}"
+#  )
+#  set(lib_EXAMPLES_SRC_DIR ${lib_SRC_DIR}/examples)
 
-else() # if(NOT ANDROID)
-  # Get an example sources from the lib sources.
-  set(lib_SRC_DIR
-    "${cmr_UNPACKED_DIR}/agg-${AGG_lib_VERSION}/LibCMaker_AGG_Sources-${AGG_lib_VERSION}"
-  )
-  set(lib_EXAMPLES_SRC_DIR ${lib_SRC_DIR}/examples)
+#  add_executable(${PROJECT_NAME} ${WIN32GUI}
+#    ${lib_EXAMPLES_SRC_DIR}/aa_demo.cpp
+#  )
+#endif()
 
-  add_executable(${PROJECT_NAME} ${WIN32GUI}
-    ${lib_EXAMPLES_SRC_DIR}/aa_demo.cpp
-  )
-endif()
+set(example_src_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
+
+add_executable(${PROJECT_NAME}
+  ${example_src_DIR}/example.cpp
+)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+
+
+#-----------------------------------------------------------------------
+# Link to the libraries
+#-----------------------------------------------------------------------
 
 # AGG
 target_include_directories(${PROJECT_NAME} PRIVATE ${AGG_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${AGG_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${AGG_LIBRARY})
+
+
+#-----------------------------------------------------------------------
+# Testing
+#-----------------------------------------------------------------------
+
+set(test_src_DIR "${CMAKE_CURRENT_LIST_DIR}/src")
+add_subdirectory(test)

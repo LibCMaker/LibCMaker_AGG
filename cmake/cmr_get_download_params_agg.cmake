@@ -26,7 +26,7 @@
   # Version format is major.minor.patch where patch is svn commit number, r128.
   if(version VERSION_EQUAL "2.4.128")
     set(arch_file_sha
-      "abb572a59013c9eb81cba84a4e2d08e279e224b33f8f5e7169482b043ae0cb71")
+      "98da05cd59554123cda16e0653c6108c80e2b6a46f422fe89f6db25a40ab587f")
   endif()
 
   # We get the source tar file from an unofficial place,
