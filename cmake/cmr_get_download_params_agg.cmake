@@ -33,7 +33,7 @@
   # so as not to depend on the "svn" program.
   set(base_url "https://github.com/LibCMaker/LibCMaker_AGG_Sources/archive")
   set(src_dir_name    "agg-${version}")
-  set(arch_file_name  "${src_dir_name}.tar.bz2")
+  set(arch_file_name  "${src_dir_name}.tar.gz")
   set(unpack_to_dir   "${unpacked_dir}/${src_dir_name}")
 
   set(${out_ARCH_SRC_URL}   "${base_url}/v${version}.tar.gz" PARENT_SCOPE)

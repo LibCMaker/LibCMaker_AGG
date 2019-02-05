@@ -57,6 +57,7 @@ build_linux: &build_linux
 
   script:
     - ${cmr_CMAKE_CMD} ../
+        -Dcmr_BUILD_MULTIPROC_CNT=${cmr_JOBS_CNT}
         -Dcmr_PRINT_DEBUG=ON
         -DCMAKE_VERBOSE_MAKEFILE=ON
         -DCMAKE_COLOR_MAKEFILE=ON
@@ -135,6 +136,7 @@ build_android: &build_android
 
   script:
     - ${cmr_CMAKE_CMD} ../
+        -Dcmr_BUILD_MULTIPROC_CNT=${cmr_JOBS_CNT}
         -Dcmr_PRINT_DEBUG=ON
         -DCMAKE_VERBOSE_MAKEFILE=ON
         -DCMAKE_COLOR_MAKEFILE=ON
