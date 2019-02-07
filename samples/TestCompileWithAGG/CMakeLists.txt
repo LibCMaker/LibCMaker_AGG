@@ -45,17 +45,19 @@ endif()
 # Set path vars
 #-----------------------------------------------------------------------
 
-set(libs_DIR "${CMAKE_CURRENT_LIST_DIR}/libs")
+set(LibCMaker_LIB_DIR "${CMAKE_CURRENT_LIST_DIR}/libs")
 set(cmr_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
-# To use below for sample sources.
-set(cmr_UNPACKED_DIR ${CMAKE_CURRENT_BINARY_DIR}/download/unpacked)
+
+if(NOT cmr_UNPACKED_DIR)
+  set(cmr_UNPACKED_DIR "${PROJECT_BINARY_DIR}/download/unpacked")
+endif()
 
 
 #-----------------------------------------------------------------------
 # LibCMaker settings
 #-----------------------------------------------------------------------
 
-set(LibCMaker_DIR "${libs_DIR}/LibCMaker")
+set(LibCMaker_DIR "${LibCMaker_LIB_DIR}/LibCMaker")
 list(APPEND CMAKE_MODULE_PATH "${LibCMaker_DIR}/cmake")
 include(cmr_find_package)
 
@@ -67,10 +69,10 @@ include(cmr_find_package)
 option(BUILD_TESTING "Build the testing tree." OFF)
 if(BUILD_TESTING)
   enable_testing()
-  include(${libs_DIR}/LibCMaker_GoogleTest/cmr_build_googletest.cmake)
+  include(${LibCMaker_LIB_DIR}/LibCMaker_GoogleTest/cmr_build_googletest.cmake)
 endif()
 
-include(${libs_DIR}/LibCMaker_AGG/cmr_build_agg.cmake)
+include(${LibCMaker_LIB_DIR}/LibCMaker_AGG/cmr_build_agg.cmake)
 
 
 #-----------------------------------------------------------------------
