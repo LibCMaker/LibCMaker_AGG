@@ -302,5 +302,5 @@ notifications:
   email:
     recipients:
       - nfeodonit@yandex.com
-    on_success: change
+    on_success: always
     on_failure: always
