@@ -32,7 +32,7 @@ environment:
 
     cmr_MinGW_w64_ROOT_PATH: C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1
 
-    PATH: ${cmr_INSTALL_DIR}\bin;${cmr_CMAKE_DIR}\bin;%PATH%
+    PATH: ${cmr_INSTALL_DIR}\bin;${cmr_INSTALL_DIR}\lib;${cmr_CMAKE_DIR}\bin;%PATH%
 
     cmr_JOBS_CNT: 4
 
@@ -42,7 +42,7 @@ environment:
       cmr_GENERATOR:    -DCMAKE_GENERATOR:STRING="Visual Studio 15 2017"
       cmr_GEN_PLATFORM: -DCMAKE_GENERATOR_PLATFORM:STRING="x64"
       cmr_GEN_TOOLSET:  -DCMAKE_GENERATOR_TOOLSET:STRING="v141,host=x64"
-      cmr_CONFIG_TYPES: -DCMAKE_CONFIGURATION_TYPES:STRING:STRING=${cmr_CMAKE_BUILD_TYPE}
+      cmr_CONFIG_TYPES: -DCMAKE_CONFIGURATION_TYPES:STRING=${cmr_CMAKE_BUILD_TYPE}
       cmr_STD_LIBS:
       cmr_BUILD_SHARED_LIBS: ON
 
@@ -120,7 +120,7 @@ environment:
       cmr_CMAKE_VERSION: 3.4
       cmr_CMAKE_RELEASE: cmake-${cmr_CMAKE_VERSION}.0-win32-x86
       MINGW_HOME: ${cmr_MinGW_w64_ROOT_PATH}\mingw64
-      PATH: ${cmr_INSTALL_DIR}\bin;${cmr_CMAKE_DIR}\bin;${MINGW_HOME}\bin;%PATH%
+      PATH: ${cmr_INSTALL_DIR}\bin;${cmr_INSTALL_DIR}\lib;${cmr_CMAKE_DIR}\bin;${MINGW_HOME}\bin;%PATH%
 
     # MinGW-w64, x64, static
     - cmr_MinGW_w64_x64_static: ON
@@ -167,19 +167,6 @@ matrix:
 
     - image: Visual Studio 2017
       cmr_MSVC_2015_x64_static: ON
-
-
-# TODO: remove it after fix shared win build.
-    - image: Visual Studio 2017
-      cmr_MSVC_2017_x64_shared: ON
-    - image: Visual Studio 2017
-      cmr_MSVC_2017_x32_shared: ON
-    - image: Visual Studio 2017
-      cmr_MSVC_2017_WinXP_shared: ON
-    - image: Visual Studio 2017
-      cmr_MinGW_w64_x64_shared: ON
-    - image: Visual Studio 2015
-      cmr_MSVC_2015_x64_shared: ON
 
 
 clone_folder: c:\projects\LibCMaker_${cmr_LIB_NAME}

@@ -161,7 +161,7 @@ SET( antigrain_SOURCES
 )
 
 #controls code for interactive modifying samples
-SET( controls_HEADERS   
+SET( controls_HEADERS
     ${antigrain_SOURCE_DIR}/include/ctrl/agg_slider_ctrl.h
     ${antigrain_SOURCE_DIR}/include/ctrl/agg_spline_ctrl.h
     ${antigrain_SOURCE_DIR}/include/ctrl/agg_scale_ctrl.h
@@ -191,18 +191,18 @@ SET( antigrain_SOURCES ${antigrain_SOURCES} ${controls_SOURCES} )
 #freetype library
 IF ( agg_USE_FREETYPE )
     INCLUDE_DIRECTORIES( ${antigrain_SOURCE_DIR}/font_freetype )
-    SET( antigrain_SOURCES ${antigrain_SOURCES} 
+    SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.cpp
     )
-    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.h DESTINATION agg/font_freetype )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_freetype/agg_font_freetype.h DESTINATION agg/font_freetype )
 ENDIF ( agg_USE_FREETYPE )
 
 IF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
     #platform stuff to ease sample use
-    SET( platform_HEADERS   
+    SET( platform_HEADERS
         ${antigrain_SOURCE_DIR}/include/platform/agg_platform_support.h
     )
-    INSTALL( FILES ${platform_HEADERS} DESTINATION agg/include/platform ) 
+    INSTALL( FILES ${platform_HEADERS} DESTINATION agg/include/platform )
 ENDIF(NOT ANDROID AND NOT NOT_ADD_AGG_PLATFORM)
 
 IF(WIN32)
@@ -210,7 +210,7 @@ IF(WIN32)
     SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.cpp
     )
-    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/font_win32_tt/agg_font_win32_tt.h DESTINATION agg/font_win32_tt )
 
     IF(NOT NOT_ADD_AGG_PLATFORM)
         SET( antigrain_SOURCES ${antigrain_SOURCES}
@@ -236,7 +236,7 @@ ENDIF(APPLE AND NOT NOT_ADD_AGG_PLATFORM)
 IF( SDL_FOUND AND agg_USE_SDL_PLATFORM )
     SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/src/platform/sdl/agg_platform_support.cpp
-    ) 
+    )
 ENDIF( SDL_FOUND AND agg_USE_SDL_PLATFORM )
 
 # boolean operations library GPC
@@ -245,7 +245,7 @@ IF ( agg_USE_GPC )
     SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/gpc/gpc.c
     )
-    INSTALL( FILES ${antigrain_SOURCE_DIR}/gpc/gpc.h DESTINATION agg/gpc )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/gpc/gpc.h DESTINATION agg/gpc )
 ENDIF ( agg_USE_GPC )
 
 IF ( agg_USE_AGG2D )
@@ -253,14 +253,17 @@ IF ( agg_USE_AGG2D )
     SET( antigrain_SOURCES ${antigrain_SOURCES}
         ${antigrain_SOURCE_DIR}/agg2d/agg2d.cpp
     )
-    INSTALL( FILES ${antigrain_SOURCE_DIR}/agg2d/agg2d.h DESTINATION agg/agg2d )	
+    INSTALL( FILES ${antigrain_SOURCE_DIR}/agg2d/agg2d.h DESTINATION agg/agg2d )
 ENDIF ( agg_USE_AGG2D )
 
 ADD_LIBRARY( antigrain
     ${antigrain_SOURCES}
 )
 SET_TARGET_PROPERTIES( antigrain PROPERTIES OUTPUT_NAME agg${PFDEBUG} )
+IF(MSVC)
+    SET_TARGET_PROPERTIES( antigrain PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON )
+ENDIF()
 
-INSTALL( FILES ${antigrain_HEADERS} DESTINATION agg/include )	
-INSTALL( FILES ${controls_HEADERS} DESTINATION agg/include/ctrl )	
+INSTALL( FILES ${antigrain_HEADERS} DESTINATION agg/include )
+INSTALL( FILES ${controls_HEADERS} DESTINATION agg/include/ctrl )
 INSTALL( TARGETS antigrain DESTINATION lib )
