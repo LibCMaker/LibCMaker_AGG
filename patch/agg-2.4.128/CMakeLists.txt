@@ -30,7 +30,7 @@ endif()
 # additional are modified Find routines
 SET ( CMAKE_MODULE_PATH "${antigrain_SOURCE_DIR}/bin" )
 
-CMAKE_MINIMUM_REQUIRED( VERSION 2.4.8 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
 
 SET(AGG_MAJOR_VERSION 0 )
 SET(AGG_MINOR_VERSION 1 )
